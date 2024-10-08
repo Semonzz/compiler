@@ -1,6 +1,9 @@
 #include "Head.h"
 
+
 int main(){
-		HT_item b("qwq", "1212");
-		b.Show();
+		HashTable a;
+		a.insert("qwe", "q1231");
+		a.insert("qwe3445", "q1");
+		a.Show();
 }

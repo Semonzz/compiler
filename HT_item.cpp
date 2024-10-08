@@ -27,3 +27,14 @@ HT_item::~HT_item(){
 		delete[] key;
 		delete[] value;
 }
+
+char* HT_item::getKey(){
+		return this->key;
+}
+
+void HT_item::operator=(HT_item &other){
+		this->key = new char[sizeof(other.getKey())];
+		this->value = new char[sizeof(other.value)];
+		strcpy(this->key, other.key);
+		strcpy(this->value, other.value);
+}
