@@ -1,18 +1,19 @@
 #pragma once
 
-#include "Head.h"
+#include "Token.h"
 
-class HashTable{
+class HashTable {
 private:
-		HT_item* items;
-		long long sz, cnt;
+	int sz = 10000;
+	Token* table = new Token[sz+1];
+
+	int hash(string key);
+
 public:
-		HashTable();
-		HashTable(long long size);
-		void Show();
-		void insert(const char* key, const char* value);
-		~HashTable();
-private:
-		int hashFunc(const char* key);
-		void resize();
+	HashTable() {}
+	~HashTable();
+	
+	void print();
+	void printToFile(string path);
+	void insert(Token token);
 };

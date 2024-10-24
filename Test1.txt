@@ -1,0 +1,5 @@
+int func(){
+	int a = 1;
+	double b = 2.5;
+	int c = b + a;
+}

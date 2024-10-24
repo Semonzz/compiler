@@ -1,0 +1,7 @@
+int funcion(){
+	int a = 1, const = 10;
+	double b = 2.5;
+	int c = 567 + a * const;
+	int 45te = 333w;
+	return c;
+}

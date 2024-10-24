@@ -1,7 +1,11 @@
 #pragma once
 
+#include <string>
 #include <iostream>
-#include <string.h>
+#include <fstream>
+#include <vector>
+#include <set>
+#include <algorithm>
+#include <queue>
 
-#include "HT_item.h"
-#include "HashTable.h"
+using namespace std;
