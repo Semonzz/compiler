@@ -31,6 +31,7 @@ void Syntax::Function(Node& curr){
         End(curr.getSon(3));
         errorFlag = 0;
     }
+    if (lexeme == "ENDF") errorFlag = 0;
     if (errorFlag) PrintError();
 }
 
@@ -115,16 +116,22 @@ void Syntax::Operators(Node& curr) {
         curr.addSon("Operators");
         curr.sonsCreated = 1;
     }
-    if (!curr.getSon(0).flag) Op(curr.getSon(0));
+    if (!curr.getSon(0).flag) {
+        if (lexeme == "return") {
+            curr.flag = 1;
+            curr.getSon(1).flag = 1;
+            curr.getSon(0).flag = 1;
+        }
+        else Op(curr.getSon(0));
+    }
     else if (!curr.getSon(1).flag) {
-        if (lexemeType == "id_name") {
+        if (lexeme != "return") {
             Operators(curr.getSon(1));
             if (curr.getSon(1).flag) {
                 curr.flag = 1;
             }
         }
         else {
-            //curr.getSon(1).addSon("eps");
             curr.getSon(1).flag = 1;
             curr.flag = 1;
         }
@@ -156,19 +163,24 @@ void Syntax::VarList(Node& curr) {
     }
     if (!curr.getSon(0).flag) Id(curr.getSon(0));
     else {
-        if (curr.getChildren().size()==1 && lexeme == ",") {
-            curr.addSon(",");
-            curr.getSon(1).flag = 1;
-            curr.addSon("VarList");
-        }
-        else if (curr.getChildren().size() > 1 && curr.getSon(1).flag && lexeme != ";") {
-            VarList(curr.getSon(2));
-            if (curr.getSon(2).flag) {
+        if (lexeme != ";") {
+            if (curr.getChildren().size() == 1 && lexeme == ",") {
+                curr.addSon(",");
+                curr.getSon(1).flag = 1;
+                curr.addSon("VarList");
+            }
+            else if (curr.getChildren().size() > 1 && curr.getSon(1).flag) {
+                VarList(curr.getSon(2));
+                if (curr.getSon(2).flag) {
+                    curr.flag = 1;
+                }
+            }
+            else {
+                curr.getSon(2).flag = 1;
                 curr.flag = 1;
             }
         }
         else {
-            curr.getSon(2).flag = 1;
             curr.flag = 1;
         }
     }
@@ -334,13 +346,13 @@ void Syntax::TermOther(Node& curr) {
     }
     else {
         if (!curr.sonsCreated) {
-            if (lexeme == "+") {
-                curr.addSon("+");
+            if (lexeme == "*") {
+                curr.addSon("*");
                 curr.addSon("SimpleExpr");
                 curr.addSon("TermOther");
             }
-            else if (lexeme == "-") {
-                curr.addSon("-");
+            else if (lexeme == "/") {
+                curr.addSon("/");
                 curr.addSon("SimpleExpr");
                 curr.addSon("TermOther");
             }

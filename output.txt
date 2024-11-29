@@ -1,9 +1,9 @@
 delimiter 	|	(	|	40
 delimiter 	|	)	|	41
-operator 	|	+	|	43
+operator 	|	*	|	42
 delimiter 	|	,	|	44
-int_num 	|	1	|	49
 int_num 	|	2	|	50
+int_num 	|	3	|	51
 delimiter 	|	;	|	59
 operator 	|	=	|	61
 id_name 	|	a	|	97

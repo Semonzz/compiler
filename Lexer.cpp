@@ -6,23 +6,28 @@ string Lexer::nextLexeme(ifstream& file) {
 	string word = "";
 	char x = '/0';
 	char x_op = '/0';
-	if ((Buf == '=') || (Buf == '+') || (Buf == '-') || (Buf == '{') || (Buf == '}') || (Buf == ';') || (Buf == '(') || (Buf == ')') || (Buf == ',') || (Buf == '*') || (Buf == '/')) {
+	if ((Buf == '=') || (Buf == '+') || (Buf == '-') || (Buf == '{') || (Buf == '}') ||
+		(Buf == ';') || (Buf == '(') || (Buf == ')') || (Buf == ',')) {
 		word += Buf;
 		Buf = '/0';
 		return word;
 	}
 	else {
 		x = file.get();
-		if (file.eof()) return word;
+		if (file.eof())
+			return word;
 	}
 	//считывание пробелов в файле до первой буквы в строке;
-	while ((!file.eof() && ((x == ' ') || (x == '\n') || (x == '\t')))){
+	while ((!file.eof() && ((x == ' ') || (x == '\n') || (x == '\t'))))
+	{
+		if (x == '\n')
+			lineNum++;
 		x = file.get();
 	}
 	if (!file.eof())
 		word += x;
 	if ((x == '=') || (x == '+') || (x == '-') || (x == '{') || (x == '}') ||
-		(x == ';') || (x == '(') || (x == ')') || (x == ',') || (x == '*') || (x == '/')) {
+		(x == ';') || (x == '(') || (x == ')') || (x == ',')) {
 		return word;
 	}
 	// —читывание символов до разделител€
@@ -30,7 +35,7 @@ string Lexer::nextLexeme(ifstream& file) {
 	{
 		x = file.get();
 		if ((x == '=') || (x == '+') || (x == '-') || (x == '{') || (x == '}') ||
-			(x == ';') || (x == '(') || (x == ')') || (x == ',') || (x == '*') || (x == '/')) {
+			(x == ';') || (x == '(') || (x == ')') || (x == ',')) {
 			Buf = x;
 			break;
 		}
@@ -96,6 +101,7 @@ void Lexer::analyze(string inputFile, Node& root) {
 			}
 		}
 	}
+	analizer.push(root, "foo", lineNum, "ENDF");
 	file.close();
 	table.printToFile("output.txt");
 }
