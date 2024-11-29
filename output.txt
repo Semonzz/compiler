@@ -1,9 +1,9 @@
 delimiter 	|	(	|	40
 delimiter 	|	)	|	41
-operator 	|	*	|	42
 operator 	|	+	|	43
 delimiter 	|	,	|	44
 int_num 	|	1	|	49
+int_num 	|	2	|	50
 delimiter 	|	;	|	59
 operator 	|	=	|	61
 id_name 	|	a	|	97
@@ -11,12 +11,6 @@ id_name 	|	b	|	98
 id_name 	|	c	|	99
 delimiter 	|	{	|	123
 delimiter 	|	}	|	125
-double_num 	|	2.5	|	149
-int_num 	|	567	|	162
-Error 	|	333w	|	272
-Error 	|	45te	|	322
 key_word 	|	int	|	331
-id_name 	|	const	|	551
-key_word 	|	double	|	635
+id_name 	|	main	|	421
 key_word 	|	return	|	672
-id_name 	|	funcion	|	754

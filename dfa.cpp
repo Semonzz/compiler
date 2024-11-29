@@ -31,7 +31,7 @@ dfa::dfa() {
 }
 
 
-// Íàõîäèò ñîñòîÿíèå àâòîìàòà ïî òåêóùåìó ñîñòîÿíèþ state è âõîäíîìó ñèìâîëó c
+
 int dfa::getState(int state, char c)
 {
 	int i = 0;
@@ -39,13 +39,13 @@ int dfa::getState(int state, char c)
 	{
 		i++;
 		if (i == alphabet.size())
-			return -1; //throw std::exception("Wrong symbol");
+			return -1; 
 	}
 	return transitFunction[state][i];
 }
 
 
-// Ïðîâåðÿåò, äîïóñêàåòñÿ ëè ñòðîêà s àâòîìàòîì
+
 bool dfa::isAccept(std::string s, int &p)
 {
 	int state = 0;
@@ -62,7 +62,7 @@ bool dfa::isAccept(std::string s, int &p)
 }
 
 
-// Íàõîäèò âñå ñîñòîÿíèÿ, èç êîòîðûõ àâòîìàò ïåðåõîäèò ïî k-ìó àëôàâèòíîìó ñèìâîëó â ñîñòîÿíèå state
+
 std::set<int> dfa::inverse(int state, int k)
 {
 	std::set<int> result;
@@ -73,7 +73,7 @@ std::set<int> dfa::inverse(int state, int k)
 }
 
 
-// Ñòðîèò ìíîæåñòâî êëàññîâ ýêâèâàëåíòíîñòè íà ìíîæåñòâå ñîñòîÿíèé (íóæíî äëÿ ïîñòðîåíèÿ ìèíèìàëüíîãî àâòîìàòà)
+
 std::vector<std::vector<int>> dfa::quotientSet()
 {
 	std::vector<std::vector<int>> table(countStates, std::vector<int>(countStates, 0));
@@ -135,7 +135,7 @@ std::vector<std::vector<int>> dfa::quotientSet()
 }
 
 
-// Ñòðîèò ýêâèâàëåíòíûé ÄÊÀ ñ ìèíèìàëüíûì ÷èñëîì ñîñòîÿíèé
+
 dfa dfa::minimize()
 {
 	auto q = quotientSet();

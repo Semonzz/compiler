@@ -1,5 +1,6 @@
 #include "Lexer.h"
 
+Token SyntaxTmp;
 char Buf;
 string Lexer::nextLexeme(ifstream& file) {
 	string word = "";
@@ -37,22 +38,29 @@ string Lexer::nextLexeme(ifstream& file) {
 			word += x;
 	}
 
+	if (x == '\n')
+		lineNum++;
+
 	return word;
 }
 
-void Lexer::insert(HashTable& table, int state, int st, string type_lexeme, string lexeme) {
+void Lexer::insert(HashTable& table, int state, int st, string typeLexeme, string lexem, Node& root, Syntax& synt) {
 	if (state == st) {
-		Token a(type_lexeme, lexeme, nullptr);
+		Token a(typeLexeme, lexem, nullptr);
 		table.insert(a);
+		if (state != -1) {
+			synt.push(root, typeLexeme, lineNum, lexem);
+		}
 	}
 }
 
-void Lexer::analyze(string path_input_file) {
-	ifstream file(path_input_file);
+void Lexer::analyze(string inputFile, Node& root) {
+	ifstream file(inputFile);
 
 	dfa my;
 
 	HashTable table;
+	Syntax analizer;
 
 	string word;
 	int state;
@@ -65,31 +73,29 @@ void Lexer::analyze(string path_input_file) {
 			if (my.isAccept(word, state)) {
 
 				// Êëş÷åâûå ñëîâà (int, double, return)
-				insert(table, state, 13, "key_word", word);
+				insert(table, state, 13, "key_word", word, root, analizer);
 
 				// Îïåğàòîğû (+, -, =)
-				insert(table, state, 7, "operator", word);
+				insert(table, state, 7, "operator", word, root, analizer);
 
 				// Ğàçäåëèòåëè ({, }, (, ), ;, ,,)
-				insert(table, state, 6, "delimiter", word);
+				insert(table, state, 6, "delimiter", word, root, analizer);
 
 				// constant
-				insert(table, state, 5, "int_num", word);
-				insert(table, state, 15, "double_num", word);
+				insert(table, state, 5, "int_num", word, root, analizer);
+				insert(table, state, 15, "double_num", word, root, analizer);
 
 				// Íàçâàíèÿ
 				if (state >= 1 && state <= 4 || state >= 8 && state <= 10 || state == 14 || state == 12 || state >= 16 && state <= 19)
-					insert(table, state, state, "id_name", word);
+					insert(table, state, state, "id_name", word, root, analizer);
 			}
 			else {
 				//âûäàåì ñîîáùåíèå îá îøèáêå ñ ôàéëîì ñ îøèáêàìè;
-				insert(table, -1, -1, "Error", word);
+				insert(table, -1, -1, "Error", word, root, analizer);
 				//fout << word << "\n";
 			}
 		}
 	}
 	file.close();
-	table.print();
 	table.printToFile("output.txt");
-
 }
