@@ -16,4 +16,6 @@ public:
 	void print();
 	void printToFile(string path);
 	void insert(Token token);
+	bool isFind(Token& other);
+	Token find(string lexeme);
 };

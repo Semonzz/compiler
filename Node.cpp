@@ -1,11 +1,18 @@
 #include "Node.h"
 
-Node::Node(string s){
-	data = s;
+Node::Node(string Ndata){
+	data = Ndata;
 }
 
 void Node::addSon(string s){
 	Node n(s);
+	children.push_back(n);
+}
+
+void Node::addSon(string s, string type, int ln) {
+	Node n(s);
+	n.line = ln;
+	n.type = type;
 	children.push_back(n);
 }
 

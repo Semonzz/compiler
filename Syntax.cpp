@@ -6,6 +6,11 @@ void Syntax::PrintError() {
     exit(1);
 }
 
+void Syntax::SemanticPrintError(string str) {
+    cout << "Error in line " << lineNum << ": " << str << '\n';
+    exit(1);
+}
+
 void Syntax::Function(Node& curr){
     bool errorFlag = 1;
     if (!curr.sonsCreated) {
@@ -162,7 +167,14 @@ void Syntax::VarList(Node& curr) {
         curr.addSon("Id");
         curr.sonsCreated = 1;
     }
-    if (!curr.getSon(0).flag) Id(curr.getSon(0));
+    if (!curr.getSon(0).flag) {
+        Id(curr.getSon(0));
+
+        Token toFind(lexemeType, lexeme, nullptr, lexemeType);
+        if (table.isFind(toFind)) {
+            SemanticPrintError("Name " + lexeme + " is already used\n");
+        }
+    }
     else {
         if (lexeme != ";") {
             if (curr.getChildren().size() == 1 && lexeme == ",") {
@@ -192,11 +204,11 @@ void Syntax::VarList(Node& curr) {
 void Syntax::Type(Node& curr)
 {
     if (lexeme == "int") {
-        curr.addSon("int");
+        curr.addSon("int", "int", lineNum);
         curr.flag = 1;
     }
     else if (lexeme == "double") {
-        curr.addSon("double");
+        curr.addSon("double", "double", lineNum);
         curr.flag = 1;
     }
     else PrintError();
@@ -210,7 +222,14 @@ void Syntax::Op(Node& curr) {
         curr.addSon(";");
         curr.sonsCreated = 1;
     }
-    if (!curr.getSon(0).flag) Id(curr.getSon(0));
+    if (!curr.getSon(0).flag) {
+        Id(curr.getSon(0));
+
+        Token toFind(lexemeType, lexeme, nullptr, lexemeType);
+        if (!table.isFind(toFind)) {
+            SemanticPrintError("Name " + lexeme + " is not defined\n");
+        }
+    }
     else if (!curr.getSon(1).flag && lexeme == "=") curr.getSon(1).flag = 1;
     else if (!curr.getSon(2).flag && curr.getSon(1).flag) {
         Expr(curr.getSon(2));
@@ -259,6 +278,12 @@ void Syntax::SimpleExpr(Node& curr) {
     }
     else if (curr.getSon(0).getData() == "Id") {
         Id(curr.getSon(0));
+
+        Token toFind(lexemeType, lexeme, nullptr, lexemeType);
+        if (!table.isFind(toFind)) {
+            SemanticPrintError("Name " + lexeme + " is not defined\n");
+        }
+
         if (curr.getSon(0).flag) {
             curr.flag = 1;
         }
@@ -390,7 +415,8 @@ void Syntax::TermOther(Node& curr) {
 
 void Syntax::Id(Node& curr){
     if (lexemeType == "id_name") {
-        curr.addSon(lexeme);
+        Token find = table.find(lexeme);
+        curr.addSon(lexeme, find.typeLex, lineNum);
         curr.flag = 1;
     }
     else PrintError();
@@ -398,11 +424,11 @@ void Syntax::Id(Node& curr){
 
 void Syntax::Const(Node& curr){
     if (lexemeType == "int_num") {
-        curr.addSon(lexeme);
+        curr.addSon(lexeme, "int", lineNum);
         curr.flag = 1;
     }
     else if (lexemeType == "double_num") {
-        curr.addSon(lexeme);
+        curr.addSon(lexeme, "double", lineNum);
         curr.flag = 1;
     }
     else PrintError();
@@ -413,5 +439,4 @@ void Syntax::push(Node& root, string lexemType, int line, string lexem){
     lexeme = lexem;
     lineNum = line;
 	Function(root);
-	
 }

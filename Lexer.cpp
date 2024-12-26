@@ -51,11 +51,17 @@ string Lexer::nextLexeme(ifstream& file) {
 
 void Lexer::insert(HashTable& table, int state, int st, string typeLexeme, string lexem, Node& root, Syntax& synt) {
 	if (state == st) {
-		Token a(typeLexeme, lexem, nullptr);
-		table.insert(a);
+		
 		if (state != -1) {
 			synt.push(root, typeLexeme, lineNum, lexem);
 		}
+		if (lexem == "int" || lexem == "double") {
+			typeLex = lexem;
+		}
+		if (lexem == ";")
+			typeLex = "";
+		Token a(typeLexeme, lexem, nullptr, typeLex);
+		table.insert(a);
 	}
 }
 
@@ -65,7 +71,7 @@ void Lexer::analyze(string inputFile, Node& root) {
 	dfa my;
 
 	HashTable table;
-	Syntax analizer;
+	Syntax analizer(table);
 
 	string word;
 	int state;

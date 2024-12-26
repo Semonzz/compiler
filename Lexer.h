@@ -8,6 +8,7 @@ private:
 	string nextLexeme(ifstream& file);
 	void insert(HashTable& table, int state, int st, string typeLexeme, string lexem, Node& root, Syntax& synt);
 	int lineNum = 1;
+	string typeLex = "";
 
 public:
 	Lexer() {}

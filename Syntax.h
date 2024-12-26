@@ -1,10 +1,12 @@
 #pragma once
 #include "Node.h"
+#include "HashTable.h"
 
 class Syntax {
 private:
 	int i, lineNum;
 	string lexemeType, lexeme;
+	HashTable& table;
 	void Function(Node& curr);
 	void Begin(Node& curr);
 	void Descriptions(Node& curr);
@@ -23,7 +25,8 @@ private:
 	void ExprOther(Node& curr);
 	void TermOther(Node& curr);
 	void PrintError();
+	void SemanticPrintError(string str);
 public:
-	Syntax() {};
+	Syntax(HashTable& table) : table(table) {};
 	void push(Node& root, string lexemType, int line, string lexeme);
 };
