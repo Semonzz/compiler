@@ -69,7 +69,14 @@ void Syntax::End(Node& curr) {
         curr.sonsCreated = 1;
     }
     if (!curr.getSon(0).flag && lexeme == "return") curr.getSon(0).flag = 1;
-    else if (!curr.getSon(1).flag && curr.getSon(0).flag) Id(curr.getSon(1));
+    else if (!curr.getSon(1).flag && curr.getSon(0).flag){
+        Id(curr.getSon(1));
+
+        Token toFind(lexemeType, lexeme, nullptr, lexemeType);
+        if (!table.isFind(toFind)) {
+            SemanticPrintError("Name " + lexeme + " is not defined\n");
+        }
+    }
     else if (!curr.getSon(2).flag && lexeme == ";" && curr.getSon(1).flag) curr.getSon(2).flag = 1;
     else if (!curr.getSon(3).flag && lexeme == "}" && curr.getSon(2).flag) {
         curr.getSon(3).flag = 1;
