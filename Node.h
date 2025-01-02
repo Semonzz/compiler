@@ -17,6 +17,6 @@ public:
 	string getData();
 	vector<Node> getChildren();
 	string postfixPrint(int& cnt);
-	void semErr();
+	void semanticErrors();
 	void addSon(string s, string type, int ln);
 };

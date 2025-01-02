@@ -1,6 +1,6 @@
 double main(){
 	int a, b, c;
 	double d;
-	a = 2 + 3 * 3;
+	a = 2 * 3 + 3;
 	return d;
 }
